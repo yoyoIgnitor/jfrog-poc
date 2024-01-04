@@ -1,0 +1,25 @@
+name: Python Build
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build-and-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v3
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Install alembic
+        run: |
+          mkdir -p ~/.pip
+          echo "[global]\nextra-index-url=https://chandapukiran.kumar@sentinelone.com:cmVmdGtuOjAxOjE3MzU4ODU0ODQ6UW82cTZXY0V2TUdZQWZJVTlzc0sxamlZMGxQ@kirantest.jfrog.io/artifactory/api/pypi/python/simple" > ~/.pip/pip.conf
+          python -m pip install -r requirements.txt
